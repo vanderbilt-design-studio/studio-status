@@ -1,8 +1,3 @@
-/*
-@pjs preload="DSHeader.png";
-@pjs font="Source-Code-Pro.ttf";
-*/
-
 PImage logo; // 1920 x 203
 PFont sourceCodePro;
 
@@ -10,7 +5,7 @@ PFont sourceCodePro;
 void setup() {
     size(1920, 1080);
     logo = loadImage("DSHeader.png", "png");
-    textFont(createFont("Source Code Pro", 400));
+    textFont(createFont("Source-Code-Pro.ttf", 400));
     frameRate(2);
 }
 
@@ -27,7 +22,7 @@ void draw() {
     } else if (dayOfWeek == 5) {
         isOpen = currentHour >= 12 && currentHour < 18;
     } else if (dayOfWeek == 6) {
-        isOpen == currentHour >= 12 && currentHour < 4;
+        isOpen = currentHour >= 12 && currentHour < 4;
     }
     drawOpen(isOpen);
 }
