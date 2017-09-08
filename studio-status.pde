@@ -10,22 +10,24 @@ PFont sourceCodePro;
 void setup() {
     size(1920, 1080);
     logo = loadImage("DSHeader.png", "png");
-    textFont(createFont("Source Code Pro", 200));
+    textFont(createFont("Source Code Pro", 400));
+    frameRate(2);
 }
 
 void draw() {
     background(255, 255, 255);
     image(logo, 0, 0);
     textAlign(CENTER, CENTER);
-    int dayOfWeek = dow(day(), month(), year());
 
+    int dayOfWeek = dow(day(), month(), year());
+    int currentHour = hour();
     boolean isOpen = false;
     if (dayOfWeek == 1 || dayOfWeek == 2 || dayOfWeek == 3 || dayOfWeek == 4) {
-        isOpen = hour() >= 14 && hour() < 22;
+        isOpen = currentHour >= 14 && currentHour < 22;
     } else if (dayOfWeek == 5) {
-        isOpen = hour() >= 12 && hour() < 18;
+        isOpen = currentHour >= 12 && currentHour < 18;
     } else if (dayOfWeek == 6) {
-        isOpen == hour() >= 12 && hour < 4;
+        isOpen == currentHour >= 12 && currentHour < 4;
     }
     drawOpen(isOpen);
 }
