@@ -1,16 +1,16 @@
 PImage logo; // 1920 x 203
 PFont sourceCodePro400, sourceCodePro80;
 
-String[][] names = {{},
+String[][] names = {{"", "", "Dominic G", "Olivia C"},
                     {"", "Kurt L", "Jonah H.", "Foard N", "Jillian B"},
                     {"", "Nicholas B", "Lin L", "Eric Noonan", "Alex B"},
                     {"", "Lauren B", "Christina H", "Sophia Z", "Taylor P"},
                     {"", "Jeremy D", "Sameer P", "Emily M", "Julian S"},
                     {"Liam K", "Illiya L", "Josh P"},
-                    {"Dominic G", "Olivia C"}};
+                    {}};
 
 void setup() {
-  size(1920, 1080);
+  fullScreen();
   logo = loadImage("DSHeader.png", "png");
   sourceCodePro80 = createFont("Source-Code-Pro.ttf", 80);
   sourceCodePro400 = createFont("Source-Code-Pro.ttf", 400);
@@ -32,8 +32,8 @@ boolean isOpen() {
     isOpen = currentHour >= 14 && currentHour < 22;
   } else if (dayOfWeek == 5) {
     isOpen = currentHour >= 12 && currentHour < 18;
-  } else if (dayOfWeek == 6) {
-    isOpen = currentHour >= 12 && currentHour < 4;
+  } else if (dayOfWeek == 0) {
+    isOpen = currentHour >= 4 && currentHour < 8;
   }
   return isOpen;
 }
