@@ -1,4 +1,5 @@
 import java.util.Map;
+import processing.io.*;
 
 PImage logo; // 1920 x 203
 
@@ -17,11 +18,19 @@ String[][] names = {{"", "", "Dominic G", "Olivia C"},
 final color BLUE = color(0,0,181), GREEN = color(0,85, 0), PURPLE = color(121,40,161), 
     BLACK = color(0,0,0), BROWN = color(56,41,3), RED = color(135, 13, 37), ORANGE = color(145, 79, 21);
 
+
+boolean isGPIOAvailable = true;
+
 void setup() {
   fullScreen();
   logo = loadImage("DSHeader.png", "png");
   for (int i = 20; i <= 400; i += 20) {
     fonts.put(i, createFont(fontPath, i));
+  }
+  if (isGPIOAvailable) {
+    GPIO.pinMode(11, GPIO.INPUT);
+    GPIO.pinMode(13, GPIO.INPUT);
+    GPIO.pinMode(15, GPIO.INPUT);
   }
   frameRate(2);
 }
@@ -44,7 +53,7 @@ boolean isOpen() {
   } else if (dayOfWeek == 0) {
     isOpen = currentHour >= 4 && currentHour < 8;
   }
-  return isOpen;
+  return isOpen && getSwitchValue() != CLOSED;
 }
 
 // d = day in month
@@ -69,7 +78,7 @@ void drawOpen(boolean open) {
 }
 
 void drawMentorOnDuty() {
-  if (isOpen()) {
+  if (isOpen() && getSwitchValue() == OPENONE) {
     fill(BLACK);
     textFont(fonts.get(100));
     textAlign(CENTER, BASELINE);
@@ -77,4 +86,11 @@ void drawMentorOnDuty() {
              names[dow(day(), month(), year())][((hour() - 12) / 2)],
          960, 1080);
   }
+}
+
+
+final int OPENONE = 1, OPENTWO = 2, CLOSED = 0;
+
+int getSwitchValue() {
+  return isGPIOAvailable ? (GPIO.digitalRead(13) == GPIO.HIGH ? CLOSED : GPIO.digitalRead(15) == GPIO.HIGH ? OPENTWO : OPENONE) : OPENONE;
 }
