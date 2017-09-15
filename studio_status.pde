@@ -1,5 +1,10 @@
+import java.util.Map;
+
 PImage logo; // 1920 x 203
-PFont sourceCodePro400, sourceCodePro80;
+
+String fontPath = "Roadgeek 2005 Series 4B.ttf";
+
+HashMap<Integer, PFont> fonts = new HashMap<Integer, PFont>();
 
 String[][] names = {{"", "", "Dominic G", "Olivia C"},
                     {"", "Kurt L", "Jonah H.", "Foard N", "Jillian B"},
@@ -9,11 +14,15 @@ String[][] names = {{"", "", "Dominic G", "Olivia C"},
                     {"Liam K", "Illiya L", "Josh P"},
                     {}};
 
+final color BLUE = color(0,0,181), GREEN = color(0,85, 0), PURPLE = color(121,40,161), 
+    BLACK = color(0,0,0), BROWN = color(56,41,3), RED = color(135, 13, 37), ORANGE = color(145, 79, 21);
+
 void setup() {
   fullScreen();
   logo = loadImage("DSHeader.png", "png");
-  sourceCodePro80 = createFont("Source-Code-Pro.ttf", 80);
-  sourceCodePro400 = createFont("Source-Code-Pro.ttf", 400);
+  for (int i = 20; i <= 400; i += 20) {
+    fonts.put(i, createFont(fontPath, i));
+  }
   frameRate(2);
 }
 
@@ -53,17 +62,17 @@ int dow(int d, int m, int y) {
 }
 
 void drawOpen(boolean open) {
-  fill(open ? 0 : 255, open ? 255 : 0, 0);
-  textFont(sourceCodePro400);
+  fill(open ? GREEN : RED);
+  textFont(fonts.get(400));
   textAlign(CENTER, TOP);
   text(open ? "Open" : "Closed", 960, 203);
 }
 
 void drawMentorOnDuty() {
   if (isOpen()) {
-    fill(0, 0, 0);
-    textFont(sourceCodePro80);
-    textAlign(CENTER, BOTTOM);
+    fill(BLACK);
+    textFont(fonts.get(100));
+    textAlign(CENTER, BASELINE);
     text("Mentor on Duty: " +
              names[dow(day(), month(), year())][((hour() - 12) / 2)],
          960, 1080);
