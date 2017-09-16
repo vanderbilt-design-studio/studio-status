@@ -15,9 +15,10 @@ String[][] names = {{"", "", "Dominic G", "Olivia C"},
                     {"Liam K", "Illiya L", "Josh P"},
                     {}};
 
-final color BLUE = color(0,0,181), GREEN = color(0,85, 0), PURPLE = color(121,40,161), 
-    BLACK = color(0,0,0), BROWN = color(56,41,3), RED = color(135, 13, 37), ORANGE = color(145, 79, 21);
-
+final color BLUE = color(0, 67, 123), GREEN = color(0, 95, 77),
+            PURPLE = color(157, 0, 113), BLACK = color(0, 0, 0),
+            BROWN = color(98, 51, 30), RED = color(199, 0, 43),
+            ORANGE = color(255, 104, 2), YELLOW = color(255, 178, 0);
 
 boolean isGPIOAvailable = true;
 
@@ -28,9 +29,8 @@ void setup() {
     fonts.put(i, createFont(fontPath, i));
   }
   if (isGPIOAvailable) {
-    GPIO.pinMode(11, GPIO.INPUT);
-    GPIO.pinMode(13, GPIO.INPUT);
-    GPIO.pinMode(15, GPIO.INPUT);
+    GPIO.pinMode(17, GPIO.INPUT);
+    GPIO.pinMode(27, GPIO.INPUT);
   }
   frameRate(2);
 }
@@ -88,9 +88,12 @@ void drawMentorOnDuty() {
   }
 }
 
-
 final int OPENONE = 1, OPENTWO = 2, CLOSED = 0;
 
 int getSwitchValue() {
-  return isGPIOAvailable ? (GPIO.digitalRead(13) == GPIO.HIGH ? CLOSED : GPIO.digitalRead(15) == GPIO.HIGH ? OPENTWO : OPENONE) : OPENONE;
+  return isGPIOAvailable
+             ? (GPIO.digitalRead(17) == GPIO.HIGH
+                    ? OPENONE
+                    : GPIO.digitalRead(27) == GPIO.HIGH ? OPENTWO : CLOSED)
+             : OPENTWO;
 }
