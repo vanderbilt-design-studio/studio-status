@@ -1,26 +1,52 @@
+import java.util.PriorityQueue;
 import java.util.Map;
 import processing.io.*;
 
+class Drawable implements Comparable<Drawable> {
+public
+  Runnable draw;
+public
+  float x, y, w, h;
+public
+  int priority;
+public
+  Drawable(Runnable draw, float x, float y, float w, float h) {
+    this.draw = draw;
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+  }
+
+  @Override public int compareTo(Drawable rhs) {
+    return rhs.priority - this.priority;
+  }
+}
+
+PriorityQueue<Drawable>
+    q = new PriorityQueue<Drawable>();
+
 PImage logo; // 1920 x 203
 
-String fontPath = "Roadgeek 2005 Series 4B.ttf";
+final String fontPath = "Roadgeek 2005 Series 4B.ttf";
 
-HashMap<Integer, PFont> fonts = new HashMap<Integer, PFont>();
+final HashMap<Integer, PFont> fonts = new HashMap<Integer, PFont>();
 
-String[][] names = {{"", "", "Dominic G", "Olivia C"},
-                    {"", "Kurt L", "Jonah H.", "Foard N", "Jillian B"},
-                    {"", "Nicholas B", "Lin L", "Eric Noonan", "Alex B"},
-                    {"", "Lauren B", "Christina H", "Sophia Z", "Taylor P"},
-                    {"", "Jeremy D", "Sameer P", "Emily M", "Julian S"},
-                    {"Liam K", "Illiya L", "Josh P"},
-                    {}};
+final String[][] names = {
+    {"", "", "Dominic G", "Olivia C"},
+    {"", "Kurt L", "Jonah H.", "Foard N", "Jillian B"},
+    {"", "Nicholas B", "Lin Liu", "Eric N", "Alex B"},
+    {"", "Lauren B", "Christina H", "Sophia Z", "Taylor P"},
+    {"", "Jeremy D", "Sameer P", "Emily M", "Julian S"},
+    {"Liam K", "Illiya L", "Josh P"},
+    {}};
 
 final color BLUE = color(0, 67, 123), GREEN = color(0, 95, 77),
             PURPLE = color(157, 0, 113), BLACK = color(0, 0, 0),
             BROWN = color(98, 51, 30), RED = color(199, 0, 43),
             ORANGE = color(255, 104, 2), YELLOW = color(255, 178, 0);
 
-boolean isGPIOAvailable = true;
+final boolean isGPIOAvailable = false;
 
 void setup() {
   fullScreen();
@@ -32,14 +58,21 @@ void setup() {
     GPIO.pinMode(17, GPIO.INPUT);
     GPIO.pinMode(27, GPIO.INPUT);
   }
-  frameRate(2);
+  frameRate(30);
 }
 
 void draw() {
   background(255, 255, 255);
-  image(logo, 0, 0);
+  drawDesignStudio();
   drawOpen(isOpen());
   drawMentorOnDuty();
+}
+
+void drawDesignStudio() {
+  image(logo, 0, 0);
+  fill(BLACK);
+  textFont(fonts.get(200));
+  textAlign(LEFT, TOP);
 }
 
 boolean isOpen() {
