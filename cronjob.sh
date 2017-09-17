@@ -10,7 +10,7 @@ if [ $LOCAL = $REMOTE ]; then
 elif [ $LOCAL = $BASE ]; then
     echo "studio_status updating..."
     git pull
-    kill `pgrep -f processing`
+    kill `pgrep -f processing-java`
     processing-java --sketch=`pwd` --run &
 elif [ $REMOTE = $BASE ]; then
     echo 'Origin is behind, huh?'
