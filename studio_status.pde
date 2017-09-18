@@ -46,7 +46,7 @@ final color BLUE = color(0, 67, 123), GREEN = color(0, 95, 77),
             BROWN = color(98, 51, 30), RED = color(199, 0, 43),
             ORANGE = color(255, 104, 2), YELLOW = color(255, 178, 0);
 
-final boolean isGPIOAvailable = false;
+final boolean isGPIOAvailable = true;
 
 void setup() {
   fullScreen();
@@ -84,9 +84,16 @@ boolean isOpen() {
   } else if (dayOfWeek == 5) {
     isOpen = currentHour >= 12 && currentHour < 18;
   } else if (dayOfWeek == 0) {
-    isOpen = currentHour >= 4 && currentHour < 8;
+    isOpen = currentHour >= 16 && currentHour < 20;
   }
-  return isOpen && getSwitchValue() != CLOSED;
+  int switchValue = getSwitchValue();
+  if (switchValue == OPENONE) {
+    return isOpen;
+  } else if (switchValue == OPENTWO) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 // d = day in month
@@ -117,7 +124,7 @@ void drawMentorOnDuty() {
     textAlign(CENTER, BASELINE);
     text("Mentor on Duty: " +
              names[dow(day(), month(), year())][((hour() - 12) / 2)],
-         960, 1080);
+         960, 1075);
   }
 }
 
@@ -128,5 +135,5 @@ int getSwitchValue() {
              ? (GPIO.digitalRead(17) == GPIO.HIGH
                     ? OPENONE
                     : GPIO.digitalRead(27) == GPIO.HIGH ? OPENTWO : CLOSED)
-             : OPENTWO;
+             : OPENONE;
 }
