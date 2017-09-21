@@ -26,7 +26,7 @@ public
 PriorityQueue<Drawable>
     q = new PriorityQueue<Drawable>();
 
-PImage logo; // 1920 x 203
+PShape logo; // 1920 x 203
 
 final String fontPath = "Roadgeek 2005 Series 4B.ttf";
 
@@ -50,7 +50,7 @@ final boolean isGPIOAvailable = false;
 
 void setup() {
   fullScreen();
-  logo = loadImage("DSHeader.png", "png");
+  logo = loadShape("logo.svg");
   for (int i = 20; i <= 400; i += 20) {
     fonts.put(i, createFont(fontPath, i));
   }
@@ -69,10 +69,11 @@ void draw() {
 }
 
 void drawDesignStudio() {
-  image(logo, 0, 0);
+  shape(logo, 0, 0, 200, 200);
   fill(BLACK);
   textFont(fonts.get(200));
-  textAlign(LEFT, TOP);
+  textAlign(CENTER, TOP);
+  text("Design Studio", 960, 0);
 }
 
 boolean isOpen() {
@@ -84,7 +85,7 @@ boolean isOpen() {
   } else if (dayOfWeek == 5) {
     isOpen = currentHour >= 12 && currentHour < 18;
   } else if (dayOfWeek == 0) {
-    isOpen = currentHour >= 4 && currentHour < 8;
+    isOpen = currentHour >= 16 && currentHour < 20;
   }
   return isOpen && getSwitchValue() != CLOSED;
 }
@@ -117,7 +118,7 @@ void drawMentorOnDuty() {
     textAlign(CENTER, BASELINE);
     text("Mentor on Duty: " +
              names[dow(day(), month(), year())][((hour() - 12) / 2)],
-         960, 1080);
+         960, 1075);
   }
 }
 
