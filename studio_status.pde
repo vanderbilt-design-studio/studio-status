@@ -26,7 +26,7 @@ public
 PriorityQueue<Drawable>
     q = new PriorityQueue<Drawable>();
 
-PImage logo; // 1920 x 203
+PShape logo; // 1920 x 203
 
 final String fontPath = "Roadgeek 2005 Series 4B.ttf";
 
@@ -50,7 +50,7 @@ final boolean isGPIOAvailable = true;
 
 void setup() {
   fullScreen();
-  logo = loadImage("DSHeader.png", "png");
+  logo = loadShape("logo.svg");
   for (int i = 20; i <= 400; i += 20) {
     fonts.put(i, createFont(fontPath, i));
   }
@@ -69,10 +69,11 @@ void draw() {
 }
 
 void drawDesignStudio() {
-  image(logo, 0, 0);
+  shape(logo, 0, 0, 200, 200);
   fill(BLACK);
   textFont(fonts.get(200));
-  textAlign(LEFT, TOP);
+  textAlign(CENTER, TOP);
+  text("Design Studio", 960, 0);
 }
 
 boolean isOpen() {
@@ -135,5 +136,10 @@ int getSwitchValue() {
              ? (GPIO.digitalRead(17) == GPIO.HIGH
                     ? OPENONE
                     : GPIO.digitalRead(27) == GPIO.HIGH ? OPENTWO : CLOSED)
+<<<<<<< HEAD
              : OPENONE;
 }
+=======
+             : OPENTWO;
+}
+>>>>>>> 43e5aca7a958aa30ebf1e22edc655c19c8080e35
