@@ -60,7 +60,6 @@ void setup() {
     GPIO.pinMode(17, GPIO.INPUT);
     GPIO.pinMode(27, GPIO.INPUT);
     stripservo = new SoftwareServo(this);
-    stripservo.attach(22);
   }
   frameRate(5);
 }
@@ -88,6 +87,8 @@ void flipOpenStripServo() {
     }
     
     if (shouldFlip) {
+      stripservo.attach(22);
+      delay(500);
       if (isOpen()) {
         stripservo.write(140);
         servoOpen = true;
@@ -95,6 +96,7 @@ void flipOpenStripServo() {
         stripservo.write(65);
         servoOpen = false;
       }
+      stripservo.detach();
     }
   }
 }
