@@ -46,7 +46,7 @@ final color BLUE = color(0, 67, 123), GREEN = color(0, 95, 77),
             BROWN = color(98, 51, 30), RED = color(199, 0, 43),
             ORANGE = color(255, 104, 2), YELLOW = color(255, 178, 0);
 
-final boolean isGPIOAvailable = false;
+final boolean isGPIOAvailable = true;
 
 SoftwareServo stripservo;
 
@@ -59,8 +59,7 @@ void setup() {
   if (isGPIOAvailable) {
     GPIO.pinMode(17, GPIO.INPUT);
     GPIO.pinMode(27, GPIO.INPUT);
-    new SoftwareServo(this);
-    stripservo.attach(22);
+    stripservo = new SoftwareServo(this);
   }
   frameRate(30);
 }
@@ -75,17 +74,22 @@ void draw() {
 
 boolean firstSet = false;
 boolean servoOpen = false;
+
 void flipOpenStripServo() {
-  if (isOpen() && (!firstSet || !servoOpen)) {
-    stripservo.write(65);
-    delay(1500);
-    servoOpen = true;
-    firstSet = true;
-  } else if (isOpen() && (!firstSet || servoOpen)){
-    stripservo.write(125);
-    delay(1500);
-    servoOpen = false;
-    firstSet = true;
+  if (isGPIOAvailable) {
+    stripservo.attach(22);
+    if (isOpen() && (!firstSet || !servoOpen)) {
+      stripservo.write(65);
+      delay(1500);
+      servoOpen = true;
+      firstSet = true;
+    } else if (isOpen() && (!firstSet || servoOpen)) {
+      stripservo.write(125);
+      delay(1500);
+      servoOpen = false;
+      firstSet = true;
+    }
+    stripservo.detach();
   }
 }
 
