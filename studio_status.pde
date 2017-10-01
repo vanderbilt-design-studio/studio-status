@@ -72,22 +72,21 @@ void draw() {
   flipOpenStripServo();
 }
 
-boolean firstSet = false;
 boolean servoOpen = false;
-
+long lastSwitch = 0;
 void flipOpenStripServo() {
   if (isGPIOAvailable) {
     stripservo.attach(22);
-    if (isOpen() && (!firstSet || !servoOpen)) {
+    if (isOpen() && (System.currentTimeMillis() - lastSwitch > 1500 || !servoOpen)) {
       stripservo.write(65);
       delay(1500);
       servoOpen = true;
-      firstSet = true;
-    } else if (isOpen() && (!firstSet || servoOpen)) {
+      lastSwitch = System.currentTimeMillis();
+    } else if (!isOpen() && (System.currentTimeMillis() - lastSwitch > 1500 || servoOpen)) {
       stripservo.write(125);
       delay(1500);
       servoOpen = false;
-      firstSet = true;
+      lastSwitch = System.currentTimeMillis();
     }
     stripservo.detach();
   }
