@@ -48,6 +48,8 @@ final color BLUE = color(0, 67, 123), GREEN = color(0, 95, 77),
 
 final boolean isGPIOAvailable = true;
 
+SoftwareServo stripservo;
+
 void setup() {
   fullScreen();
   logo = loadShape("logo.svg");
@@ -57,6 +59,8 @@ void setup() {
   if (isGPIOAvailable) {
     GPIO.pinMode(17, GPIO.INPUT);
     GPIO.pinMode(27, GPIO.INPUT);
+    new SoftwareServo(this);
+    stripservo.attach(22);
   }
   frameRate(30);
 }
@@ -66,6 +70,23 @@ void draw() {
   drawDesignStudio();
   drawOpen(isOpen());
   drawMentorOnDuty();
+  flipOpenStripServo();
+}
+
+boolean firstSet = false;
+boolean servoOpen = false;
+void flipOpenStripServo() {
+  if (isOpen() && (!firstSet || !servoOpen)) {
+    stripservo.write(65);
+    delay(1500);
+    servoOpen = true;
+    firstSet = true;
+  } else if (isOpen() && (!firstSet || servoOpen)){
+    stripservo.write(125);
+    delay(1500);
+    servoOpen = false;
+    firstSet = true;
+  }
 }
 
 void drawDesignStudio() {
@@ -136,10 +157,5 @@ int getSwitchValue() {
              ? (GPIO.digitalRead(17) == GPIO.HIGH
                     ? OPENONE
                     : GPIO.digitalRead(27) == GPIO.HIGH ? OPENTWO : CLOSED)
-<<<<<<< HEAD
              : OPENONE;
 }
-=======
-             : OPENTWO;
-}
->>>>>>> 43e5aca7a958aa30ebf1e22edc655c19c8080e35
