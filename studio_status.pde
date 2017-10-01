@@ -79,12 +79,10 @@ void flipOpenStripServo() {
     stripservo.attach(22);
     if (isOpen() && (System.currentTimeMillis() - lastSwitch > 1500 || !servoOpen)) {
       stripservo.write(65);
-      delay(1500);
       servoOpen = true;
       lastSwitch = System.currentTimeMillis();
     } else if (!isOpen() && (System.currentTimeMillis() - lastSwitch > 1500 || servoOpen)) {
       stripservo.write(125);
-      delay(1500);
       servoOpen = false;
       lastSwitch = System.currentTimeMillis();
     }
