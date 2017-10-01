@@ -60,8 +60,9 @@ void setup() {
     GPIO.pinMode(17, GPIO.INPUT);
     GPIO.pinMode(27, GPIO.INPUT);
     stripservo = new SoftwareServo(this);
+    stripservo.attach(22);
   }
-  frameRate(30);
+  frameRate(5);
 }
 
 void draw() {
@@ -73,7 +74,6 @@ void draw() {
 }
 
 boolean servoOpen = false;
-long lastSwitch = 0;
 boolean firstSwitch = true;
 void flipOpenStripServo() {
   if (isGPIOAvailable) {
@@ -87,19 +87,14 @@ void flipOpenStripServo() {
       shouldFlip = true;
     }
     
-    if (System.currentTimeMillis() - lastSwitch < 1500) { // rate limit
-      shouldFlip = false;
-    }
-    
     if (shouldFlip) {
-      stripservo.attach(22);
       if (isOpen()) {
-        stripservo.write(65);
+        stripservo.write(140);
+        servoOpen = true;
       } else {
-        stripservo.write(125);
+        stripservo.write(65);
+        servoOpen = false;
       }
-      stripservo.detach();
-      lastSwitch = System.currentTimeMillis();
     }
   }
 }
