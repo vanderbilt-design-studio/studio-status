@@ -74,19 +74,33 @@ void draw() {
 
 boolean servoOpen = false;
 long lastSwitch = 0;
+boolean firstSwitch = true;
 void flipOpenStripServo() {
   if (isGPIOAvailable) {
-    stripservo.attach(22);
-    if (isOpen() && (System.currentTimeMillis() - lastSwitch > 1500 || !servoOpen)) {
-      stripservo.write(65);
-      servoOpen = true;
-      lastSwitch = System.currentTimeMillis();
-    } else if (!isOpen() && (System.currentTimeMillis() - lastSwitch > 1500 || servoOpen)) {
-      stripservo.write(125);
-      servoOpen = false;
+    boolean shouldFlip = false;
+    if (firstSwitch) {
+      firstSwitch = false;
+      shouldFlip = true;
+    } else if (isOpen() && !servoOpen) { // TODO: self, xor this pls
+      shouldFlip = true;
+    } else if (!isOpen() && servoOpen) {
+      shouldFlip = true;
+    }
+    
+    if (System.currentTimeMillis() - lastSwitch < 1500) { // rate limit
+      shouldFlip = false;
+    }
+    
+    if (shouldFlip) {
+      stripservo.attach(22);
+      if (isOpen()) {
+        stripservo.write(65);
+      } else {
+        stripservo.write(125);
+      }
+      stripservo.detach();
       lastSwitch = System.currentTimeMillis();
     }
-    stripservo.detach();
   }
 }
 
