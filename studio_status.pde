@@ -112,7 +112,14 @@ boolean isOpen() {
   } else if (dayOfWeek == 0) {
     isOpen = currentHour >= 16 && currentHour < 20;
   }
-  return isOpen && getSwitchValue() != CLOSED;
+  int switchValue = getSwitchValue();
+  if (switchValue == OPENONE) {
+    return isOpen;
+  } else if (switchValue == OPENTWO) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 // d = day in month
@@ -154,5 +161,5 @@ int getSwitchValue() {
              ? (GPIO.digitalRead(17) == GPIO.HIGH
                     ? OPENONE
                     : GPIO.digitalRead(27) == GPIO.HIGH ? OPENTWO : CLOSED)
-             : OPENTWO;
+             : OPENONE;
 }
