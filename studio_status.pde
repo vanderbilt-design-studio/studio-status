@@ -1,6 +1,7 @@
 import java.util.PriorityQueue;
 import java.util.Map;
 import processing.io.*;
+import processing.serial.*;
 
 class Drawable implements Comparable<Drawable> {
 public
@@ -50,6 +51,8 @@ final boolean isGPIOAvailable = true;
 
 SoftwareServo stripservo;
 
+Serial doorDuino;
+
 void setup() {
   fullScreen();
   logo = loadShape("logo.svg");
@@ -60,6 +63,10 @@ void setup() {
     GPIO.pinMode(17, GPIO.INPUT);
     GPIO.pinMode(27, GPIO.INPUT);
     stripservo = new SoftwareServo(this);
+    String[] serial = Serial.list();
+    if (serial.length > 0) {
+      doorDuino = new Serial(this, serial[0], 9600);
+    }
   }
   frameRate(5);
 }
@@ -87,18 +94,22 @@ void flipOpenStripServo() {
     }
     
     if (shouldFlip) {
-      stripservo.attach(22);
-      delay(500);
       if (isOpen()) {
-        stripservo.write(140);
+        // stripservo.write(140);
         servoOpen = true;
       } else {
-        stripservo.write(65);
+        // stripservo.write(65);
         servoOpen = false;
       }
-      stripservo.detach();
     }
   }
+}
+
+boolean isDoorOpen() {
+  doorDuino.write(0);
+  long timeout = System.currentTimeMillis();
+  while (doorDuino.available() == 0 && System.currentTimeMillis() - timeout < 250) {}
+  return System.currentTimeMillis() - timeout < 250 ? doorDuino.read() == 1 : true;
 }
 
 void drawDesignStudio() {
