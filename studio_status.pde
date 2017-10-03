@@ -68,7 +68,7 @@ void setup() {
       doorDuino = new Serial(this, serial[0], 9600);
     }
   }
-  frameRate(5);
+  frameRate(3);
 }
 
 void draw() {
@@ -133,9 +133,9 @@ boolean isOpen() {
   }
   int switchValue = getSwitchValue();
   if (switchValue == OPENONE) {
-    return isOpen;
+    return isOpen && isDoorOpen();
   } else if (switchValue == OPENTWO) {
-    return true;
+    return true && isDoorOpen();
   } else {
     return false;
   }
