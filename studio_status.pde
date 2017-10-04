@@ -69,7 +69,7 @@ void setup() {
       println(serial[0]);
     }
   }
-  frameRate(3);
+  frameRate(10);
 }
 
 void draw() {
@@ -107,10 +107,10 @@ void flipOpenStripServo() {
 }
 
 boolean isDoorOpen() {
-  doorDuino.write(0);
+  doorDuino.write((byte)0);
   long timeout = System.currentTimeMillis();
-  while (doorDuino.available() == 0 && System.currentTimeMillis() - timeout < 250) {}
-  return System.currentTimeMillis() - timeout < 250 ? doorDuino.readString().equals("1") : true;
+  while (doorDuino.available() == 0 && System.currentTimeMillis() - timeout < 700) {}
+  return System.currentTimeMillis() - timeout < 700 ? doorDuino.readString().equals("1") : true;
 }
 
 void drawDesignStudio() {
@@ -136,7 +136,7 @@ boolean isOpen() {
   if (switchValue == OPENONE) {
     return isOpen && isDoorOpen();
   } else if (switchValue == OPENTWO) {
-    return true && isDoorOpen();
+    return isDoorOpen();
   } else {
     return false;
   }
