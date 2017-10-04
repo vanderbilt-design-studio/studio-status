@@ -65,7 +65,7 @@ void setup() {
     stripservo = new SoftwareServo(this);
     String[] serial = Serial.list();
     if (serial.length > 0) {
-      doorDuino = new Serial(this, serial[0], 9600);
+      doorDuino = new Serial(this, serial[0], 600);
       println(serial[0]);
     }
   }
@@ -110,7 +110,7 @@ boolean isDoorOpen() {
   doorDuino.write((byte)0);
   long timeout = System.currentTimeMillis();
   while (doorDuino.available() == 0 && System.currentTimeMillis() - timeout < 700) {}
-  return System.currentTimeMillis() - timeout < 700 ? doorDuino.readString().equals("1") : true;
+  return System.currentTimeMillis() - timeout < 700 ? doorDuino.read() == 1 : true;
 }
 
 void drawDesignStudio() {
