@@ -3,29 +3,6 @@ import java.util.Map;
 import processing.io.*;
 import processing.serial.*;
 
-class Drawable implements Comparable<Drawable> {
-public
-  Runnable draw;
-public
-  float x, y, w, h;
-public
-  int priority;
-public
-  Drawable(Runnable draw, float x, float y, float w, float h) {
-    this.draw = draw;
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
-  }
-
-  @Override public int compareTo(Drawable rhs) {
-    return rhs.priority - this.priority;
-  }
-}
-
-PriorityQueue<Drawable>
-    q = new PriorityQueue<Drawable>();
 
 PShape logo; // 1920 x 203
 
@@ -34,12 +11,12 @@ final String fontPath = "Roadgeek 2005 Series 4B.ttf";
 final HashMap<Integer, PFont> fonts = new HashMap<Integer, PFont>();
 
 final String[][] names = {
-    {"", "", "Dominic G", "Olivia C"},
-    {"", "Kurt L", "Jonah H.", "Foard N", "Jillian B"},
-    {"", "Nicholas B", "Lin Liu", "Eric N", "Alex B"},
+    {"", "", "Dominic G", "Olivia C", "Foard N"},
+    {"", "Juliana Soltys", "Jonah H.", "", "Jillian B"},
+    {"", "Eric N", "Lin Liu", "Sameer P", "Alex B"},
     {"", "Lauren B", "Christina H", "Sophia Z", "Taylor P"},
-    {"", "Jeremy D", "Sameer P", "Emily M", "Julian S"},
-    {"Liam K", "Illiya L", "Josh P"},
+    {"", "Jeremy D", "Illiya", "Emily M", "Nicholcas B"},
+    {"Liam K", "Josh P"},
     {}};
 
 final color BLUE = color(0, 67, 123), GREEN = color(0, 95, 77),
@@ -48,6 +25,7 @@ final color BLUE = color(0, 67, 123), GREEN = color(0, 95, 77),
             ORANGE = color(255, 104, 2), YELLOW = color(255, 178, 0);
 
 final boolean isGPIOAvailable = true;
+boolean isDoorDuinoAvailable = false;
 
 SoftwareServo stripservo;
 
@@ -67,6 +45,7 @@ void setup() {
     if (serial.length > 0) {
       doorDuino = new Serial(this, serial[0], 600);
       println(serial[0]);
+      isDoorDuinoAvailable = true;
     }
   }
   frameRate(10);
@@ -107,6 +86,7 @@ void flipOpenStripServo() {
 }
 
 boolean isDoorOpen() {
+  if (!isDoorDuinoAvailable) { return true; }
   doorDuino.write((byte)0);
   long timeout = System.currentTimeMillis();
   while (doorDuino.available() == 0 && System.currentTimeMillis() - timeout < 700) {}
@@ -125,12 +105,12 @@ boolean isOpen() {
   int dayOfWeek = dow(day(), month(), year());
   int currentHour = hour();
   boolean isOpen = false;
-  if (dayOfWeek == 1 || dayOfWeek == 2 || dayOfWeek == 3 || dayOfWeek == 4) {
-    isOpen = currentHour >= 14 && currentHour < 22;
-  } else if (dayOfWeek == 5) {
-    isOpen = currentHour >= 12 && currentHour < 18;
-  } else if (dayOfWeek == 0) {
-    isOpen = currentHour >= 16 && currentHour < 20;
+  if (currentHour >= 12 && dayOfWeek > -1 && dayOfWeek < 7) {
+    int EODhour = names[dayOfWeek].length * 2 + 12;
+    int idx = (currentHour - 12)/2 - 1;
+    if (currentHour < EODhour && names[dayOfWeek].length > idx && idx > -1 && !names[dayOfWeek][idx].isEmpty()) {
+      isOpen = true;
+    }
   }
   int switchValue = getSwitchValue();
   if (switchValue == OPENONE) {
