@@ -107,7 +107,7 @@ boolean isOpen() {
   boolean isOpen = false;
   if (currentHour >= 12 && dayOfWeek > -1 && dayOfWeek < 7) {
     int EODhour = names[dayOfWeek].length * 2 + 12;
-    int idx = (currentHour - 12)/2 - 1;
+    int idx = (currentHour - 12)/2;
     if (currentHour < EODhour && names[dayOfWeek].length > idx && idx > -1 && !names[dayOfWeek][idx].isEmpty()) {
       isOpen = true;
     }
